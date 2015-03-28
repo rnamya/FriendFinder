@@ -1,0 +1,8 @@
+*.class
+*.jar
+*.prefs
+*.dex
+*.apk
+*.cache
+*.classpath
+*.proj
