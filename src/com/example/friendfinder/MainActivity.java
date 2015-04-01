@@ -11,10 +11,16 @@ import android.widget.Button;
 
 public class MainActivity extends Activity {
 
+	public final String KEY_DATA_MANAGER_EXTRA = "DataManager";
+	
+	DataManager dataManager;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        dataManager = new DataManager(getApplicationContext());
     
     // Using intent to launch another activity
         
