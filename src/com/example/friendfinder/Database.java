@@ -48,7 +48,7 @@ public class Database extends SQLiteOpenHelper {
 	
 	public void deleteContact(Contact contact) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		String sql = "DELETE FROM "+TABLE_CONTACT+" WHERE "+TABLE_CONTACT_COLUMN_PHONE_NUMBER+"="+contact.getPhone()+";";
+		String sql = "DELETE FROM "+TABLE_CONTACT+" WHERE "+TABLE_CONTACT_COLUMN_PHONE_NUMBER+"='"+contact.getPhone()+"';";
 		db.execSQL(sql);
 		
 	}
@@ -106,10 +106,7 @@ public class Database extends SQLiteOpenHelper {
 		String sql = "SELECT *FROM "+TABLE_CONTACT+";";
 		Cursor cursor = db.rawQuery(sql, null);
 		
-		boolean curse = cursor.isFirst();
-		System.out.println(curse);
-		
-		if (cursor.isFirst()) {
+		if (cursor.moveToFirst()) {
 			while(cursor.moveToNext()) {
 				Contact contact = new Contact(cursor.getString(0), cursor.getString(1), hasAccessToLocation(cursor.getInt(2)));
 				Log.d("CONTACT: ", contact.toString()); //added
