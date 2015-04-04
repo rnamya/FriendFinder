@@ -29,7 +29,7 @@ public class Database extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		String createContact = "CREATE TABLE "+TABLE_CONTACT+"( "+TABLE_CONTACT_COLUMN_PHONE_NUMBER+" TEXT, " +
 				TABLE_CONTACT_COLUMN_NAME+" TEXT, "+TABLE_CONTACT_COLUMN_ALLOWED+" INTEGER);";
-		
+		Log.d("INIT", "DATABASE");
 		db.execSQL(createContact);
 		
 	}
@@ -83,7 +83,8 @@ public class Database extends SQLiteOpenHelper {
 	public void updateAllContacts(Set<Contact> allContacts) {
 		logAllContacts();
 		Set<Contact> currentContacts = getAllContacts();
-		Log.d("ALL CONTACTS: ", allContacts.toString());
+		Log.d("ALL CONTACTS IN DATABASE: ", currentContacts.toString());
+		Log.d("ALL CONTACTS IN PHONE: ", allContacts.toString());
 		
 		Set<Contact> toBeAdded = new HashSet<>(allContacts);
 		toBeAdded.removeAll(currentContacts);
@@ -107,13 +108,13 @@ public class Database extends SQLiteOpenHelper {
 		Cursor cursor = db.rawQuery(sql, null);
 		
 		if (cursor.moveToFirst()) {
-			while(cursor.moveToNext()) {
+			do {
 				Contact contact = new Contact(cursor.getString(0), cursor.getString(1), hasAccessToLocation(cursor.getInt(2)));
-				Log.d("CONTACT: ", contact.toString()); //added
 				contacts.add(contact);
-			}
+			} while(cursor.moveToNext());
 		}
 		
+		Log.d("getAllContacts(): ", contacts.toString());
 		return contacts;
 	}
 	

@@ -41,7 +41,12 @@ public class Contact {
 	}
 	
 	@Override
+	public int hashCode() {
+		return this.phone.hashCode();
+	}
+	
+	@Override
 	public String toString() {
-		return this.name + this.phone + this.hasAccessToLocation;
+		return this.name + " " + this.phone + " " + this.hasAccessToLocation;
 	}
 }

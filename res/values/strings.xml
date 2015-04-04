@@ -4,7 +4,6 @@
     <string name="app_name">FriendFinder</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="text_status">Status</string>
     <string name="text_update">Update location</string>
     <string name="text_people">People nearby</string>
     <string name="text_contacts">Contacts</string>
