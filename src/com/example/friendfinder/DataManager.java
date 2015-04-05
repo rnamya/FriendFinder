@@ -12,7 +12,10 @@ import android.provider.ContactsContract;
 
 public class DataManager {
 	
-	private final String CONTACTS_PREF ="ContactPrefs";
+	private final String CONTACTS_PREF = "ContactPrefs";
+	
+	private final String KEY_USERNAME = "username";
+	private final String KEY_PASSWORD = "password";
 	
 	ContentResolver contentResolver;
 	SharedPreferences sharedPreferences;
@@ -24,6 +27,30 @@ public class DataManager {
 		this.database = new Database(context, null, null, 1);
 		
 		updateContacts();
+	}
+	
+	public String getUsername()
+	{
+		return sharedPreferences.getString(KEY_USERNAME, null);
+	}
+	
+	public void setUsername(String username)
+	{
+		SharedPreferences.Editor edit = sharedPreferences.edit();
+		edit.putString(KEY_USERNAME, username);
+		edit.commit();
+	}
+	
+	public String getPassword()
+	{
+		return sharedPreferences.getString(KEY_PASSWORD, null);
+	}
+	
+	public void setPassword(String password)
+	{
+		SharedPreferences.Editor edit = sharedPreferences.edit();
+		edit.putString(KEY_PASSWORD, password);
+		edit.commit();
 	}
 	
 	public Set<Contact> getAllContacts() {

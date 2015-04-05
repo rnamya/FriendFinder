@@ -8,7 +8,8 @@
     <string name="text_people">People nearby</string>
     <string name="text_contacts">Contacts</string>
     <string name="title_activity_contacts">Contacts</string>
-    <string name="title_activity_people_nearby">PeopleNearbyActivity</string>
-    <string name="title_activity_update_location">UpdateLocationActivity</string>
+    <string name="title_activity_people_nearby">People Nearby</string>
+    <string name="title_activity_update_location">Update Location</string>
+    <string name="title_activity_register">Register</string>
 
 </resources>

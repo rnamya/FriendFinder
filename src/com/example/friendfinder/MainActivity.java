@@ -1,5 +1,7 @@
 package com.example.friendfinder;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,20 +9,33 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 public class MainActivity extends Activity {
 
 	public final String KEY_DATA_MANAGER_EXTRA = "DataManager";
+	private ServerCommunicator communicator;
 	
 	DataManager dataManager;
-	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         
         dataManager = new DataManager(getApplicationContext());
+        
+        if(dataManager.getUsername() == null) {
+        	Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+        	startActivity(intent);
+        }	
+        
+        setContentView(R.layout.activity_main);
+        try {
+        communicator = new ServerCommunicator();
+        }
+        catch (Exception e) {
+        	e.printStackTrace();
+		}
     
     // Using intent to launch another activity
         
@@ -37,8 +52,22 @@ public class MainActivity extends Activity {
     buttonPeople.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(MainActivity.this, PeopleNearbyActivity.class);
-            startActivity(intent);
+            //Intent intent = new Intent(MainActivity.this, PeopleNearbyActivity.class);
+            //startActivity(intent);
+        	
+        	new Thread(){
+        		@Override
+        		public void run() {
+        			JSONObject jsonData = null;
+                	try {
+                		jsonData = new JSONObject("{'hi':'hello'}");
+                		Toast.makeText(getApplicationContext(), communicator.send(jsonData).toString(), Toast.LENGTH_SHORT).show();
+                	}
+                	catch (Exception e) {
+                		e.printStackTrace();
+        			}
+        		}
+        	}.start();
         }
     });
 
