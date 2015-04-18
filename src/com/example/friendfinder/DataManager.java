@@ -12,7 +12,7 @@ import android.provider.ContactsContract;
 
 public class DataManager {
 	
-	private final String CONTACTS_PREF = "ContactPrefs";
+	private final String USER_PREF = "UserPreferences";
 	
 	private final String KEY_USERNAME = "username";
 	private final String KEY_PASSWORD = "password";
@@ -22,11 +22,15 @@ public class DataManager {
 	Database database;
 	
 	DataManager(Context context) {
-		this.sharedPreferences = context.getSharedPreferences(CONTACTS_PREF, Context.MODE_PRIVATE);
+		this.sharedPreferences = context.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE);
 		this.contentResolver = context.getContentResolver();
 		this.database = new Database(context, null, null, 1);
 		
 		updateContacts();
+	}
+	
+	public String getLocation() {
+		return "";
 	}
 	
 	public String getUsername()
@@ -98,7 +102,7 @@ public class DataManager {
 
 	                  while (phoneCursor.moveToNext()) {
 	                      String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
-	                      Contact contact = new Contact(phoneNumber, name, false);
+	                      Contact contact = new Contact(phoneNumber, name, false, -1f);
 	                      contactsSet.add(contact);
 	                  }
 	                  phoneCursor.close();
@@ -108,5 +112,19 @@ public class DataManager {
 
 	      return contactsSet;
 	  }
-
+	
+	// Contact from server contains only phone number and distance.
+	// This function will return a contact containing name, phone number, distance and whether the contact has access to the user's location.
+	
+	public Contact makeContact(Contact contactFromServer)
+	{
+		String phone = contactFromServer.phone;
+		float distance = contactFromServer.distance;
+		
+		String name = database.getNameFromPhone(phone);
+		boolean hasAccessToLocation = database.getHasAccessToLocationFromPhone(phone);
+		
+		Contact newContact = new Contact(phone, name, hasAccessToLocation, distance);
+		return newContact;
+	}
 }

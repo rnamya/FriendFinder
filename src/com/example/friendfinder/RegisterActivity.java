@@ -4,13 +4,32 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 public class RegisterActivity extends Activity {
+	
+	DataManager dataManager;
+	EditText phone_number;
+	EditText password;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) { 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register);
+	    
+	    dataManager = new DataManager(getApplicationContext());
+	    
+	    phone_number = (EditText) findViewById(R.id.phone_number);
+		password = (EditText) findViewById(R.id.password);
+	    
+	}
+	
+	public void register(View view)
+	{
+		dataManager.setUsername(phone_number.getText().toString());
+		dataManager.setPassword(password.getText().toString());
+		finish();
 	}
 
 	@Override

@@ -65,6 +65,22 @@ public class Database extends SQLiteOpenHelper {
 		}
 	}
 	
+	public void updateName(String phone, String name) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		String sql = "UPDATE "
+		+TABLE_CONTACT
+		+" SET "
+		+TABLE_CONTACT_COLUMN_NAME
+		+"='"
+		+name
+		+"' WHERE "
+		+TABLE_CONTACT_COLUMN_PHONE_NUMBER
+		+"='"
+		+phone
+		+"';";
+		db.execSQL(sql);
+	}
+	
 	public void updateContact(Contact contact) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		String sql = "UPDATE "+TABLE_CONTACT+" SET "+TABLE_CONTACT_COLUMN_NAME+"='"+contact.getName()+"', "
@@ -109,13 +125,45 @@ public class Database extends SQLiteOpenHelper {
 		
 		if (cursor.moveToFirst()) {
 			do {
-				Contact contact = new Contact(cursor.getString(0), cursor.getString(1), hasAccessToLocation(cursor.getInt(2)));
+				Contact contact = new Contact(cursor.getString(0), cursor.getString(1), hasAccessToLocation(cursor.getInt(2)), -1f);
 				contacts.add(contact);
 			} while(cursor.moveToNext());
 		}
 		
 		Log.d("getAllContacts(): ", contacts.toString());
 		return contacts;
+	}
+	
+	public String getNameFromPhone(String phone)
+	{
+		SQLiteDatabase db = this.getReadableDatabase();
+		String sql = "SELECT "
+				+TABLE_CONTACT_COLUMN_NAME
+				+" FROM "
+				+TABLE_CONTACT
+				+" WHERE "
+				+TABLE_CONTACT_COLUMN_PHONE_NUMBER
+				+"='"
+				+phone
+				+"';";
+		Cursor cursor = db.rawQuery(sql, null);
+		return cursor.getString(0);	
+	}	
+	
+	public boolean getHasAccessToLocationFromPhone(String phone)
+	{
+		SQLiteDatabase db = this.getReadableDatabase();
+		String sql = "SELECT "
+				+TABLE_CONTACT_COLUMN_ALLOWED 
+				+" FROM "
+				+TABLE_CONTACT
+				+" WHERE "
+				+TABLE_CONTACT_COLUMN_PHONE_NUMBER
+				+"='"
+				+phone
+				+"';";
+		Cursor cursor = db.rawQuery(sql, null);
+		return (cursor.getInt(0) == 1);
 	}
 	
 	public int hasAccessToLocation(Contact contact) {

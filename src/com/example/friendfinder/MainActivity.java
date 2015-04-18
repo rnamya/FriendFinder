@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +16,7 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
 	public final String KEY_DATA_MANAGER_EXTRA = "DataManager";
-	private ServerCommunicator communicator;
+	private ServerCommunicator serverCommunicator;
 	
 	DataManager dataManager;
     @Override
@@ -27,11 +28,13 @@ public class MainActivity extends Activity {
         if(dataManager.getUsername() == null) {
         	Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
         	startActivity(intent);
-        }	
+        }
         
         setContentView(R.layout.activity_main);
+        
         try {
-        communicator = new ServerCommunicator();
+        serverCommunicator = new ServerCommunicator(new NetworkHandler(), dataManager);
+        Log.d("VOOOOO", serverCommunicator.getContactsInfo(null).toString());
         }
         catch (Exception e) {
         	e.printStackTrace();
@@ -61,7 +64,7 @@ public class MainActivity extends Activity {
         			JSONObject jsonData = null;
                 	try {
                 		jsonData = new JSONObject("{'hi':'hello'}");
-                		Toast.makeText(getApplicationContext(), communicator.send(jsonData).toString(), Toast.LENGTH_SHORT).show();
+                		//Toast.makeText(getApplicationContext(), communicator.send(jsonData).toString(), Toast.LENGTH_SHORT).show();
                 	}
                 	catch (Exception e) {
                 		e.printStackTrace();
