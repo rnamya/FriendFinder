@@ -20,7 +20,6 @@ public class ContactsActivity extends Activity {
 		setContentView(R.layout.activity_contacts);
         
 		ListView listView = (ListView) findViewById(R.id.list);
-		
 		dataManager = new DataManager(getApplicationContext());
         ContactAdapter adapter = new ContactAdapter(this, new ArrayList<Contact>(dataManager.getAllContacts()), dataManager);
         listView.setAdapter(adapter);

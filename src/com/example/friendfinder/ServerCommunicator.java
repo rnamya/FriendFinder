@@ -45,6 +45,7 @@ public class ServerCommunicator {
 		// The response is a JSON object.
 		
 		List<Contact> responseContacts = deserialize(response);
+		
 		for(Contact c: responseContacts)
 		{
 			c = dataManager.makeContact(c);
