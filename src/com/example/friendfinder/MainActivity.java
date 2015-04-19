@@ -55,22 +55,8 @@ public class MainActivity extends Activity {
     buttonPeople.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            //Intent intent = new Intent(MainActivity.this, PeopleNearbyActivity.class);
-            //startActivity(intent);
-        	
-        	new Thread(){
-        		@Override
-        		public void run() {
-        			JSONObject jsonData = null;
-                	try {
-                		jsonData = new JSONObject("{'hi':'hello'}");
-                		//Toast.makeText(getApplicationContext(), communicator.send(jsonData).toString(), Toast.LENGTH_SHORT).show();
-                	}
-                	catch (Exception e) {
-                		e.printStackTrace();
-        			}
-        		}
-        	}.start();
+            Intent intent = new Intent(MainActivity.this, PeopleNearbyActivity.class);
+            startActivity(intent);
         }
     });
 

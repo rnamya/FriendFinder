@@ -31,6 +31,9 @@ public class PeopleNearbyActivity extends Activity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		List<Contact> contactsList = new ArrayList<Contact>(dataManager.getAllContacts());
+		new ViewPeopleNearbyTask().execute(contactsList);
 
 	}
 	
@@ -48,7 +51,7 @@ public class PeopleNearbyActivity extends Activity {
 
 		@Override
 		protected List<Contact> doInBackground(List<Contact>... params) {
-			List<Contact> contactsInfo;
+			List<Contact> contactsInfo = new ArrayList<Contact>();
 			List<Contact> contacts = params[0];
 			
 			try {
@@ -56,7 +59,7 @@ public class PeopleNearbyActivity extends Activity {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			return null;
+			return contactsInfo;
 		}
 		
 		@Override
