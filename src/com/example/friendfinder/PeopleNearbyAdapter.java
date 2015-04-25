@@ -36,9 +36,8 @@ public class PeopleNearbyAdapter extends ArrayAdapter<Contact> {
     contactDetails.setText(contact.getName() + "\n" + contact.getPhone());
   
     TextView contactDistance = (TextView) item.findViewById(R.id.contactDistance);
-    float d = (float) contact.getDistance();
-    String distance =Float.toString(d);
-    contactDistance.setText(distance);
+    contactDistance.setText(contact.getDistance());
+    
     
     return item;
   }

@@ -29,6 +29,7 @@ public class DataManager {
 		updateContacts();
 	}
 	
+	//TODO implement
 	public String getLocation() {
 		return "";
 	}
@@ -102,7 +103,7 @@ public class DataManager {
 
 	                  while (phoneCursor.moveToNext()) {
 	                      String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
-	                      Contact contact = new Contact(phoneNumber, name, false, -1f);
+	                      Contact contact = new Contact(phoneNumber, name, false, "Unknown");
 	                      contactsSet.add(contact);
 	                  }
 	                  phoneCursor.close();
@@ -118,13 +119,9 @@ public class DataManager {
 	
 	public Contact makeContact(Contact contactFromServer)
 	{
-		String phone = contactFromServer.phone;
-		float distance = contactFromServer.distance;
+		contactFromServer.setName(database.getNameFromPhone(contactFromServer.getPhone()));
+		contactFromServer.setHasAccessToLocation(database.getHasAccessToLocationFromPhone(contactFromServer.getPhone()));
 		
-		String name = database.getNameFromPhone(phone);
-		boolean hasAccessToLocation = database.getHasAccessToLocationFromPhone(phone);
-		
-		Contact newContact = new Contact(phone, name, hasAccessToLocation, distance);
-		return newContact;
+		return contactFromServer;
 	}
 }

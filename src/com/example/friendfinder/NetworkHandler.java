@@ -47,16 +47,21 @@ public class NetworkHandler {
 		JSONObject json = new JSONObject();
 		
 		JSONObject contact1 = new JSONObject();
-		contact1.put("phone", "123");
+		contact1.put("phone", "(944) 972-8724");
 		contact1.put("distance", "2");
 		
 		JSONObject contact2 = new JSONObject();
-		contact2.put("phone", "456");
+		contact2.put("phone", "(782) 910-6652");
 		contact2.put("distance", "90");
+		
+		JSONObject contact3 = new JSONObject();
+		contact3.put("phone", "(782) 910-6651");
+		contact3.put("distance", "9");
 		
 		JSONArray contacts = new JSONArray();
 		contacts.put(contact1);
 		contacts.put(contact2);
+		contacts.put(contact3);
 		
 		json.put("contacts", contacts);
 		

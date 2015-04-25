@@ -3,14 +3,13 @@ package com.example.friendfinder;
 public class Contact {
 	String name;
 	String phone;
-    float distance;
+    String distance;
     boolean hasAccessToLocation;
     
     public Contact() {
     	
     }
-    
-    public Contact(String phone, String name, boolean hasAccessToLocation, float distance) {
+    public Contact(String phone, String name, boolean hasAccessToLocation, String distance) {
 		this.name = name;
 		this.phone = phone;
 		this.hasAccessToLocation = hasAccessToLocation;
@@ -34,10 +33,10 @@ public class Contact {
 	public void setHasAccessToLocation(boolean hasAccessToLocation) {
 		this.hasAccessToLocation = hasAccessToLocation;
 	}
-    public float getDistance() {
+    public String getDistance() {
 		return distance;
 	}
-	public void setDistance(float distance) {
+	public void setDistance(String distance) {
 		this.distance = distance;
 	}
 	

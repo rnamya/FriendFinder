@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -23,16 +24,7 @@ public class ContactsActivity extends Activity {
 		dataManager = new DataManager(getApplicationContext());
         ContactAdapter adapter = new ContactAdapter(this, new ArrayList<Contact>(dataManager.getAllContacts()), dataManager);
         listView.setAdapter(adapter);
-        
-        /*
-        StringBuilder output = new StringBuilder();
-        for (Contact item: contactsList) {
-            String str = item.name + " " + item.phone + "\n";
-            output.append(str);
-        }
-        TextView outputText = (TextView) findViewById(R.id.textView1);
-        outputText.setText(output);
-		*/
+        Log.d("COPY DAT", adapter.getItem(0).toString());
 	}
 	
 	@Override

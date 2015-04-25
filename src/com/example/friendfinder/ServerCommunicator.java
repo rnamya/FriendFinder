@@ -9,6 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 public class ServerCommunicator {
 	NetworkHandler networkHandler;
 	DataManager dataManager;
@@ -42,12 +44,10 @@ public class ServerCommunicator {
 			e.printStackTrace();
 		}
 		
+		Log.d("RESPONSE", response.toString());
 		// The response is a JSON object.
-		
 		List<Contact> responseContacts = deserialize(response);
-		
-		for(Contact c: responseContacts)
-		{
+		for (Contact c: responseContacts) {
 			c = dataManager.makeContact(c);
 		}
 		
@@ -64,9 +64,11 @@ public class ServerCommunicator {
 			object = jsonContacts.getJSONObject(i);
 			contact = new Contact();
 			contact.setPhone(object.getString(KEY_RESPONSE_PHONE));
-			contact.setDistance(object.getInt(KEY_RESPONSE_DISTANCE));
+			contact.setDistance(object.getString(KEY_RESPONSE_DISTANCE));
 			contacts.add(contact);
 		}
+		
+		Log.d("DESERIALIZED", contacts.toString());
 		
 		//TODO Populate contacts with names so this list can be directly sent to the ListView
 		return contacts; // Contacts being returned contain only phone number and distance.

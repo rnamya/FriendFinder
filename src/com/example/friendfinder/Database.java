@@ -125,7 +125,7 @@ public class Database extends SQLiteOpenHelper {
 		
 		if (cursor.moveToFirst()) {
 			do {
-				Contact contact = new Contact(cursor.getString(0), cursor.getString(1), hasAccessToLocation(cursor.getInt(2)), -1f);
+				Contact contact = new Contact(cursor.getString(0), cursor.getString(1), hasAccessToLocation(cursor.getInt(2)), "Unknown");
 				contacts.add(contact);
 			} while(cursor.moveToNext());
 		}
@@ -136,6 +136,7 @@ public class Database extends SQLiteOpenHelper {
 	
 	public String getNameFromPhone(String phone)
 	{
+		Log.d("GETNAMEFROMPHONE", phone.toString());
 		SQLiteDatabase db = this.getReadableDatabase();
 		String sql = "SELECT "
 				+TABLE_CONTACT_COLUMN_NAME
@@ -147,7 +148,12 @@ public class Database extends SQLiteOpenHelper {
 				+phone
 				+"';";
 		Cursor cursor = db.rawQuery(sql, null);
-		return cursor.getString(0);	
+		Log.d("SQL", sql);
+		if (cursor.moveToFirst()) {
+			return cursor.getString(0);
+		}
+		
+		return "unknown";
 	}	
 	
 	public boolean getHasAccessToLocationFromPhone(String phone)
@@ -163,7 +169,11 @@ public class Database extends SQLiteOpenHelper {
 				+phone
 				+"';";
 		Cursor cursor = db.rawQuery(sql, null);
-		return (cursor.getInt(0) == 1);
+		if (cursor.moveToFirst()) {
+			return (cursor.getInt(0) == 1);
+		}
+		
+		return false;
 	}
 	
 	public int hasAccessToLocation(Contact contact) {

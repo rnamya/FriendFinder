@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -59,17 +60,19 @@ public class PeopleNearbyActivity extends Activity {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			
+			Log.d("CONTACTS INFO FROM SERVER", contactsInfo.toString());
 			return contactsInfo;
 		}
 		
 		@Override
 		protected void onPostExecute(List<Contact> contactsInfo)
 		{
-			 progressDialog.dismiss();
 			 PeopleNearbyAdapter adapter = new PeopleNearbyAdapter(PeopleNearbyActivity.this, contactsInfo);
+			 progressDialog.dismiss();
 			 listView.setAdapter(adapter);
+			 Log.d("ADAPTER", listView.getAdapter().toString());
 		}
-		
 	}
 	
 	@Override
