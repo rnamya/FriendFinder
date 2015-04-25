@@ -65,6 +65,22 @@ public class Database extends SQLiteOpenHelper {
 		}
 	}
 	
+	public void updateName(String phone, String name) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		String sql = "UPDATE "
+		+TABLE_CONTACT
+		+" SET "
+		+TABLE_CONTACT_COLUMN_NAME
+		+"='"
+		+name
+		+"' WHERE "
+		+TABLE_CONTACT_COLUMN_PHONE_NUMBER
+		+"='"
+		+phone
+		+"';";
+		db.execSQL(sql);
+	}
+	
 	public void updateContact(Contact contact) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		String sql = "UPDATE "+TABLE_CONTACT+" SET "+TABLE_CONTACT_COLUMN_NAME+"='"+contact.getName()+"', "
@@ -109,13 +125,55 @@ public class Database extends SQLiteOpenHelper {
 		
 		if (cursor.moveToFirst()) {
 			do {
-				Contact contact = new Contact(cursor.getString(0), cursor.getString(1), hasAccessToLocation(cursor.getInt(2)));
+				Contact contact = new Contact(cursor.getString(0), cursor.getString(1), hasAccessToLocation(cursor.getInt(2)), "Unknown");
 				contacts.add(contact);
 			} while(cursor.moveToNext());
 		}
 		
 		Log.d("getAllContacts(): ", contacts.toString());
 		return contacts;
+	}
+	
+	public String getNameFromPhone(String phone)
+	{
+		Log.d("GETNAMEFROMPHONE", phone.toString());
+		SQLiteDatabase db = this.getReadableDatabase();
+		String sql = "SELECT "
+				+TABLE_CONTACT_COLUMN_NAME
+				+" FROM "
+				+TABLE_CONTACT
+				+" WHERE "
+				+TABLE_CONTACT_COLUMN_PHONE_NUMBER
+				+"='"
+				+phone
+				+"';";
+		Cursor cursor = db.rawQuery(sql, null);
+		Log.d("SQL", sql);
+		if (cursor.moveToFirst()) {
+			return cursor.getString(0);
+		}
+		
+		return "unknown";
+	}	
+	
+	public boolean getHasAccessToLocationFromPhone(String phone)
+	{
+		SQLiteDatabase db = this.getReadableDatabase();
+		String sql = "SELECT "
+				+TABLE_CONTACT_COLUMN_ALLOWED 
+				+" FROM "
+				+TABLE_CONTACT
+				+" WHERE "
+				+TABLE_CONTACT_COLUMN_PHONE_NUMBER
+				+"='"
+				+phone
+				+"';";
+		Cursor cursor = db.rawQuery(sql, null);
+		if (cursor.moveToFirst()) {
+			return (cursor.getInt(0) == 1);
+		}
+		
+		return false;
 	}
 	
 	public int hasAccessToLocation(Contact contact) {

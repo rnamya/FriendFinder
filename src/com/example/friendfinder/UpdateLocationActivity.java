@@ -12,7 +12,9 @@ import android.widget.TextView;
 
 public class UpdateLocationActivity extends Activity implements LocationListener {
 	
+	// The LocationManager provides access to the system location services
 	protected LocationManager locationManager;
+	// The LocationListener is used for receiving notifications from the LocationManager when the location has changed
 	protected LocationListener locationListener;
 	protected Context context;
 	TextView txtLat;
@@ -37,7 +39,7 @@ public class UpdateLocationActivity extends Activity implements LocationListener
 		locationObj.setLatitude(location.getLatitude());
 		locationObj.setLongitude(location.getLongitude());
 		txtLat = (TextView) findViewById(R.id.textview1);
-		txtLat.setText("Latitude:"+ locationObj.latitude+ "Longitude:"+ locationObj.longitude);
+		txtLat.setText("Latitude:"+ locationObj.latitude+" "+ "Longitude:"+ locationObj.longitude);
 		// txtLat.setText("Latitude:" + location.getLatitude() + ", Longitude:" + location.getLongitude());
 	}
 	

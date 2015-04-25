@@ -40,6 +40,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
 	  Log.d("ContactAdapter constrcutor: ", this.list.toString());
   }
 
+  // Creating a view for each list item
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
     View item = null;

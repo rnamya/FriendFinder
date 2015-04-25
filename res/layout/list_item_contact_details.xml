@@ -11,8 +11,8 @@
         android:layout_centerHorizontal="true"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <CheckBox
-        android:id="@+id/contactHasAccessToLocation"
+    <TextView
+        android:id="@+id/contactDistance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

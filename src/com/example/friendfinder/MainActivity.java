@@ -3,6 +3,7 @@ package com.example.friendfinder;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,15 +13,29 @@ import android.widget.Button;
 public class MainActivity extends Activity {
 
 	public final String KEY_DATA_MANAGER_EXTRA = "DataManager";
+	private ServerCommunicator serverCommunicator;
 	
 	DataManager dataManager;
-	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         
         dataManager = new DataManager(getApplicationContext());
+        
+        if(dataManager.getUsername() == null) {
+        	Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+        	startActivity(intent);
+        }
+        
+        setContentView(R.layout.activity_main);
+        
+        try {
+        serverCommunicator = new ServerCommunicator(new NetworkHandler(), dataManager);
+        Log.d("VOOOOO", serverCommunicator.getContactsInfo(null).toString());
+        }
+        catch (Exception e) {
+        	e.printStackTrace();
+		}
     
     // Using intent to launch another activity
         

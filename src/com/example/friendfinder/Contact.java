@@ -2,13 +2,18 @@ package com.example.friendfinder;
 
 public class Contact {
 	String name;
-    String phone;
+	String phone;
+    String distance;
     boolean hasAccessToLocation;
-	
-    public Contact(String phone, String name, boolean hasAccessToLocation) {
+    
+    public Contact() {
+    	
+    }
+    public Contact(String phone, String name, boolean hasAccessToLocation, String distance) {
 		this.name = name;
 		this.phone = phone;
 		this.hasAccessToLocation = hasAccessToLocation;
+		this.distance = distance;
 	}
 	public String getName() {
 		return name;
@@ -27,6 +32,12 @@ public class Contact {
 	}
 	public void setHasAccessToLocation(boolean hasAccessToLocation) {
 		this.hasAccessToLocation = hasAccessToLocation;
+	}
+    public String getDistance() {
+		return distance;
+	}
+	public void setDistance(String distance) {
+		this.distance = distance;
 	}
 	
 	@Override
@@ -47,6 +58,6 @@ public class Contact {
 	
 	@Override
 	public String toString() {
-		return this.name + " " + this.phone + " " + this.hasAccessToLocation;
+		return this.name + " " + this.phone + " " + this.hasAccessToLocation + " " + this.distance;
 	}
 }

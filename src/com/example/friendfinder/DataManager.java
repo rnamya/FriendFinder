@@ -12,18 +12,50 @@ import android.provider.ContactsContract;
 
 public class DataManager {
 	
-	private final String CONTACTS_PREF ="ContactPrefs";
+	private final String USER_PREF = "UserPreferences";
+	
+	private final String KEY_USERNAME = "username";
+	private final String KEY_PASSWORD = "password";
 	
 	ContentResolver contentResolver;
 	SharedPreferences sharedPreferences;
 	Database database;
 	
 	DataManager(Context context) {
-		this.sharedPreferences = context.getSharedPreferences(CONTACTS_PREF, Context.MODE_PRIVATE);
+		this.sharedPreferences = context.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE);
 		this.contentResolver = context.getContentResolver();
 		this.database = new Database(context, null, null, 1);
 		
 		updateContacts();
+	}
+	
+	//TODO implement
+	public String getLocation() {
+		return "";
+	}
+	
+	public String getUsername()
+	{
+		return sharedPreferences.getString(KEY_USERNAME, null);
+	}
+	
+	public void setUsername(String username)
+	{
+		SharedPreferences.Editor edit = sharedPreferences.edit();
+		edit.putString(KEY_USERNAME, username);
+		edit.commit();
+	}
+	
+	public String getPassword()
+	{
+		return sharedPreferences.getString(KEY_PASSWORD, null);
+	}
+	
+	public void setPassword(String password)
+	{
+		SharedPreferences.Editor edit = sharedPreferences.edit();
+		edit.putString(KEY_PASSWORD, password);
+		edit.commit();
 	}
 	
 	public Set<Contact> getAllContacts() {
@@ -71,7 +103,7 @@ public class DataManager {
 
 	                  while (phoneCursor.moveToNext()) {
 	                      String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
-	                      Contact contact = new Contact(phoneNumber, name, false);
+	                      Contact contact = new Contact(phoneNumber, name, false, "Unknown");
 	                      contactsSet.add(contact);
 	                  }
 	                  phoneCursor.close();
@@ -81,5 +113,15 @@ public class DataManager {
 
 	      return contactsSet;
 	  }
-
+	
+	// Contact from server contains only phone number and distance.
+	// This function will return a contact containing name, phone number, distance and whether the contact has access to the user's location.
+	
+	public Contact makeContact(Contact contactFromServer)
+	{
+		contactFromServer.setName(database.getNameFromPhone(contactFromServer.getPhone()));
+		contactFromServer.setHasAccessToLocation(database.getHasAccessToLocationFromPhone(contactFromServer.getPhone()));
+		
+		return contactFromServer;
+	}
 }

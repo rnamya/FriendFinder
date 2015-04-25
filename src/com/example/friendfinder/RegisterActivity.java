@@ -1,36 +1,41 @@
 package com.example.friendfinder;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.EditText;
 
-public class ContactsActivity extends Activity {
-
-	public TextView listView;
-	public DataManager dataManager;
+public class RegisterActivity extends Activity {
+	
+	DataManager dataManager;
+	EditText phone_number;
+	EditText password;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) { 
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_contacts);
-        
-		ListView listView = (ListView) findViewById(R.id.list);
-		dataManager = new DataManager(getApplicationContext());
-        ContactAdapter adapter = new ContactAdapter(this, new ArrayList<Contact>(dataManager.getAllContacts()), dataManager);
-        listView.setAdapter(adapter);
-        Log.d("COPY DAT", adapter.getItem(0).toString());
+		setContentView(R.layout.activity_register);
+	    
+	    dataManager = new DataManager(getApplicationContext());
+	    
+	    phone_number = (EditText) findViewById(R.id.phone_number);
+		password = (EditText) findViewById(R.id.password);
+	    
 	}
 	
+	public void register(View view)
+	{
+		dataManager.setUsername(phone_number.getText().toString());
+		dataManager.setPassword(password.getText().toString());
+		finish();
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.contacts, menu);
+		getMenuInflater().inflate(R.menu.register, menu);
 		return true;
 	}
 
