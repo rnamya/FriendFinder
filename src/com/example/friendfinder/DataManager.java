@@ -7,6 +7,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.ContactsContract;
 
@@ -21,17 +22,16 @@ public class DataManager {
 	SharedPreferences sharedPreferences;
 	Database database;
 	
+	LocationManager locationManager;
+	
 	DataManager(Context context) {
+		locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE); 
+		
 		this.sharedPreferences = context.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE);
 		this.contentResolver = context.getContentResolver();
 		this.database = new Database(context, null, null, 1);
 		
 		updateContacts();
-	}
-	
-	//TODO implement
-	public String getLocation() {
-		return "";
 	}
 	
 	public String getUsername()
@@ -58,21 +58,21 @@ public class DataManager {
 		edit.commit();
 	}
 	
-	public Set<Contact> getAllContacts() {
-		return this.database.getAllContacts();
+	public void addContact(Contact contact) {
+		this.database.addContact(contact);
 	}
 	
 	public void updateContact(Contact contact) {
 		this.database.updateContact(contact);
 	}
 	
-	public void addContact(Contact contact) {
-		this.database.addContact(contact);
-	}
-	
 	public void updateContacts() {
 		Set<Contact> allContacts = fetchContacts();
 		this.database.updateAllContacts(allContacts);
+	}
+	
+	public Set<Contact> getAllContacts() {
+		return this.database.getAllContacts();
 	}
 	
 	public Set<Contact> fetchContacts() {
@@ -123,5 +123,16 @@ public class DataManager {
 		contactFromServer.setHasAccessToLocation(database.getHasAccessToLocationFromPhone(contactFromServer.getPhone()));
 		
 		return contactFromServer;
+	}
+	
+	com.example.friendfinder.Location getLocation() {
+		android.location.Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		
+		double latitude = location.getLongitude();
+		double longitude = location.getLatitude();
+		
+		com.example.friendfinder.Location myLocation = new com.example.friendfinder.Location(latitude, longitude);
+		
+		return myLocation;
 	}
 }

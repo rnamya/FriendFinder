@@ -1,5 +1,3 @@
-// ServerCommunicator receives the list of contacts and constructs JSON objects from it.
-
 package com.example.friendfinder;
 
 import java.util.ArrayList;
@@ -15,31 +13,71 @@ public class ServerCommunicator {
 	NetworkHandler networkHandler;
 	DataManager dataManager;
 	
-	private final String KEY_RESPONSE_CONTACT_ARRAY = "contacts";
+	private final String KEY_REQUEST_PHONE = "phone";
+	private final String KEY_REQUEST_CONTACTS = "contacts";
+	private final String KEY_REQUEST_LATITUDE = "latitude";
+	private final String KEY_REQUEST_LONGITUDE = "longitude";
+
 	private final String KEY_RESPONSE_PHONE = "phone";
 	private final String KEY_RESPONSE_DISTANCE = "distance";
+	private final String KEY_RESPONSE_CONTACT_ARRAY = "contacts";
 	
-	private final String KEY_REQUEST_CONTACTS = "contacts";
-	private final String KEY_REQUEST_PHONE = "phone";
-	private final String KEY_REQUEST_PASSWORD = "password";
-	private final String KEY_REQUEST_LOCATION = "location";
+	private static final String SERVER_REGISTER_ADDRESS = "http://lookation-testing.herokuapp.com/create";
+	private static final String SERVER_UPDATE_LOCATION_ADDRESS = "http://lookation-testing.herokuapp.com/update";
+	private static final String SERVER_GET_DISTANCES_ADDRESS = "http://lookation-testing.herokuapp.com/distances/distance";
 	
 	public ServerCommunicator(NetworkHandler networkHandler, DataManager dataManager) {
 		this.networkHandler = networkHandler;
 		this.dataManager = dataManager;
 	}
 	
+	public String register() throws Exception {
+		JSONObject locationJson = new JSONObject();
+		com.example.friendfinder.Location location = dataManager.getLocation();
+		
+		locationJson.put(KEY_REQUEST_PHONE, dataManager.getUsername());
+		locationJson.put(KEY_REQUEST_LATITUDE, location.latitude);
+		locationJson.put(KEY_REQUEST_LONGITUDE, location.longitude);
+		
+		JSONObject response = null;
+		
+		try {
+			response = networkHandler.send(locationJson, SERVER_UPDATE_LOCATION_ADDRESS, true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return response.toString();
+	}
+	
+	public String checkIn() throws JSONException {
+		JSONObject locationJson = new JSONObject();
+		com.example.friendfinder.Location location = dataManager.getLocation();
+		
+		locationJson.put(KEY_REQUEST_PHONE, dataManager.getUsername());
+		locationJson.put(KEY_REQUEST_LATITUDE, location.latitude);
+		locationJson.put(KEY_REQUEST_LONGITUDE, location.longitude);
+		
+		JSONObject response = null;
+		
+		try {
+			response = networkHandler.send(locationJson, SERVER_REGISTER_ADDRESS, true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return response.toString();
+	}
+	
 	public List<Contact> getContactsInfo(List<Contact> contacts) throws Exception {
 		JSONObject json = new JSONObject();
-		// The request. Sending list of contacts, phone number, password and location.
-		json.put(KEY_REQUEST_CONTACTS, new JSONArray(contacts));
+		// The request. Sending phone number, password, location, list of contacts.
 		json.put(KEY_REQUEST_PHONE, dataManager.getUsername());
-		json.put(KEY_REQUEST_PASSWORD, dataManager.getPassword());
-		json.put(KEY_REQUEST_LOCATION, dataManager.getLocation());
+		json.put(KEY_REQUEST_CONTACTS, new JSONArray(contacts));
 		
 		JSONObject response = null;
 		try {
-			response = networkHandler.testSend(json);
+			response = networkHandler.send(json, SERVER_GET_DISTANCES_ADDRESS, true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

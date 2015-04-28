@@ -9,7 +9,7 @@
     tools:context="com.example.friendfinder.MainActivity" >
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/checkIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -17,27 +17,27 @@
         android:text="@string/text_update" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/peopleNearby"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button1"
+        android:layout_below="@+id/checkIn"
         android:layout_marginTop="15dp"
         android:text="@string/text_people"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_alignStart="@+id/button1"
-        android:layout_alignRight="@+id/button1"
-        android:layout_alignEnd="@+id/button1" />
+        android:layout_alignLeft="@+id/checkIn"
+        android:layout_alignStart="@+id/checkIn"
+        android:layout_alignRight="@+id/checkIn"
+        android:layout_alignEnd="@+id/checkIn" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/contacts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button2"
+        android:layout_below="@+id/peopleNearby"
         android:layout_marginTop="15dp"
         android:text="@string/text_contacts"
-        android:layout_alignLeft="@+id/button2"
-        android:layout_alignStart="@+id/button2"
-        android:layout_alignRight="@+id/button2"
-        android:layout_alignEnd="@+id/button2" />
+        android:layout_alignLeft="@+id/peopleNearby"
+        android:layout_alignStart="@+id/peopleNearby"
+        android:layout_alignRight="@+id/peopleNearby"
+        android:layout_alignEnd="@+id/peopleNearby" />
 
 </RelativeLayout>

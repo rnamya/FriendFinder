@@ -1,5 +1,3 @@
-// NetworkHandler sends a JSON request and receives a JSON object.
-
 package com.example.friendfinder;
 
 import java.io.BufferedReader;
@@ -14,20 +12,20 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class NetworkHandler {
-	private static final String SERVER_IP_ADDRESS = "http://www.mocky.io/v2/551f9166de02019314690e3f";
 	private static final int TIMEOUT_IN_MILLIS = 2000;
 	private static final String REQUEST_METHOD = "POST";
 	
-	URL url;
-	
-	public NetworkHandler() throws Exception {
-		this.url = new URL(SERVER_IP_ADDRESS);
+	public JSONObject send(JSONObject jsonData, String address, boolean testing) throws Exception {
+		if (testing) {
+			return testSend(jsonData, address);
+		}
+		else {
+			return send(jsonData, address);
+		}
 	}
 	
-	public JSONObject send(JSONObject jsonData) throws Exception
-	{
-		HttpURLConnection connection = getConnection();
-		
+	public JSONObject send(JSONObject jsonData, String address) throws Exception {
+		HttpURLConnection connection = getConnection(address);
 		connection.connect();
 		
 		OutputStream outStream = connection.getOutputStream();
@@ -35,7 +33,6 @@ public class NetworkHandler {
 		writer.write(jsonData.toString());
 		
 		InputStream stream = connection.getInputStream();
-		
 		JSONObject resultData = toJSON(stream);
 		
 		connection.disconnect();
@@ -43,7 +40,7 @@ public class NetworkHandler {
 		return resultData;
 	}
 	
-	public JSONObject testSend(JSONObject j) throws Exception {
+	public JSONObject testSend(JSONObject requestObject, String address) throws Exception {
 		JSONObject json = new JSONObject();
 		
 		JSONObject contact1 = new JSONObject();
@@ -68,8 +65,26 @@ public class NetworkHandler {
 		return json;
 	}
 	
-	private HttpURLConnection getConnection() throws Exception {
-		HttpURLConnection connection = (HttpURLConnection) this.url.openConnection();
+	public JSONObject testSendLocation(JSONObject j) throws Exception {
+		
+		JSONObject json = new JSONObject();
+		json.put("phone", "9449729724");
+		json.put("location", "myLocation");
+		
+		JSONObject response = new JSONObject();
+		response.put("STATUS", "OK");
+		
+		return response;
+	}
+	
+	/**
+	 * 
+	 * @param address The address to which a connection is to be made
+	 * @return Returns an HttpUrlConnection
+	 * @throws Exception Throws an exception when connection could not be established
+	 */
+	private HttpURLConnection getConnection(String address) throws Exception {
+		HttpURLConnection connection = (HttpURLConnection) new URL(address).openConnection();
 		
 		connection.setConnectTimeout(TIMEOUT_IN_MILLIS);
 		connection.setReadTimeout(TIMEOUT_IN_MILLIS);

@@ -1,6 +1,9 @@
 package com.example.friendfinder;
 
+import org.json.JSONException;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,7 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -36,19 +39,30 @@ public class MainActivity extends Activity {
         catch (Exception e) {
         	e.printStackTrace();
 		}
-    
-    // Using intent to launch another activity
         
-    Button buttonLocation = (Button) findViewById(R.id.button1);
-    buttonLocation.setOnClickListener(new View.OnClickListener() {
+        Button buttonLocation = (Button) findViewById(R.id.checkIn);
+        buttonLocation.setOnClickListener(new View.OnClickListener() {
+        
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(MainActivity.this, UpdateLocationActivity.class);
-            startActivity(intent);
+        	String msg = new String();
+        	try {
+				msg = serverCommunicator.checkIn();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	
+        	Context context = getApplicationContext();
+        	CharSequence text = msg;
+        	int duration = Toast.LENGTH_SHORT;
+
+        	Toast toast = Toast.makeText(context, text, duration);
+        	toast.show();
         }
     });
         
-    Button buttonPeople = (Button) findViewById(R.id.button2);
+    Button buttonPeople = (Button) findViewById(R.id.peopleNearby);
     buttonPeople.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -57,7 +71,7 @@ public class MainActivity extends Activity {
         }
     });
 
-    Button buttonContacts = (Button) findViewById(R.id.button3);
+    Button buttonContacts = (Button) findViewById(R.id.contacts);
     buttonContacts.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
