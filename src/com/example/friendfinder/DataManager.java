@@ -16,7 +16,6 @@ public class DataManager {
 	private final String USER_PREF = "UserPreferences";
 	
 	private final String KEY_USERNAME = "username";
-	private final String KEY_PASSWORD = "password";
 	
 	ContentResolver contentResolver;
 	SharedPreferences sharedPreferences;
@@ -43,18 +42,6 @@ public class DataManager {
 	{
 		SharedPreferences.Editor edit = sharedPreferences.edit();
 		edit.putString(KEY_USERNAME, username);
-		edit.commit();
-	}
-	
-	public String getPassword()
-	{
-		return sharedPreferences.getString(KEY_PASSWORD, null);
-	}
-	
-	public void setPassword(String password)
-	{
-		SharedPreferences.Editor edit = sharedPreferences.edit();
-		edit.putString(KEY_PASSWORD, password);
 		edit.commit();
 	}
 	
@@ -128,8 +115,8 @@ public class DataManager {
 	com.example.friendfinder.Location getLocation() {
 		android.location.Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		
-		double latitude = location.getLongitude();
-		double longitude = location.getLatitude();
+		double latitude = location.getLatitude();
+		double longitude = location.getLongitude();
 		
 		com.example.friendfinder.Location myLocation = new com.example.friendfinder.Location(latitude, longitude);
 		

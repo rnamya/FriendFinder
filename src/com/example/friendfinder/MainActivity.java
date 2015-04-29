@@ -41,8 +41,7 @@ public class MainActivity extends Activity {
 		}
         
         Button buttonLocation = (Button) findViewById(R.id.checkIn);
-        buttonLocation.setOnClickListener(new View.OnClickListener() {
-        
+        buttonLocation.setOnClickListener(new View.OnClickListener() {    
         @Override
         public void onClick(View v) {
         	String msg = new String();

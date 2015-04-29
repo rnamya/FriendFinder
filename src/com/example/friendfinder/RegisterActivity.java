@@ -21,14 +21,11 @@ public class RegisterActivity extends Activity {
 	    dataManager = new DataManager(getApplicationContext());
 	    
 	    phone_number = (EditText) findViewById(R.id.phone_number);
-		password = (EditText) findViewById(R.id.password);
-	    
 	}
 	
 	public void register(View view)
 	{
 		dataManager.setUsername(phone_number.getText().toString());
-		dataManager.setPassword(password.getText().toString());
 		finish();
 	}
 
