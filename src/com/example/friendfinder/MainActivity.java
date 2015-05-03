@@ -3,7 +3,6 @@ package com.example.friendfinder;
 import org.json.JSONException;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,20 +43,16 @@ public class MainActivity extends Activity {
         buttonLocation.setOnClickListener(new View.OnClickListener() {    
         @Override
         public void onClick(View v) {
-        	String msg = new String();
+        	String msg = null;
         	try {
 				msg = serverCommunicator.checkIn();
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				msg = "Failed to update location.";
+			} catch (RuntimeException e) {
+				msg = "Location unavailable! Try again later.";
 			}
         	
-        	Context context = getApplicationContext();
-        	CharSequence text = msg;
-        	int duration = Toast.LENGTH_SHORT;
-
-        	Toast toast = Toast.makeText(context, text, duration);
-        	toast.show();
+        	Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
         }
     });
         

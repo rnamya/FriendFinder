@@ -35,7 +35,6 @@ public class PeopleNearbyActivity extends Activity {
 		
 		List<Contact> contactsList = new ArrayList<Contact>(dataManager.getAllContacts());
 		new ViewPeopleNearbyTask().execute(contactsList);
-
 	}
 	
 	public class ViewPeopleNearbyTask extends AsyncTask<List<Contact>, Void, List<Contact>>

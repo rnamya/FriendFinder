@@ -8,12 +8,13 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
+
+import android.util.Log;
 
 public class NetworkHandler {
 	private static final int TIMEOUT_IN_MILLIS = 2000;
-	private static final String REQUEST_METHOD = "POST";
+	private static final String REQUEST_METHOD = "GET";
 	
 	public JSONObject send(JSONObject jsonData, String address, boolean testing) throws Exception {
 		if (testing) {
@@ -24,18 +25,61 @@ public class NetworkHandler {
 		}
 	}
 	
-	public JSONObject send(JSONObject jsonData, String address) throws Exception {
+	public JSONObject send(String address) throws Exception {
+		Log.d("URL", address);
 		HttpURLConnection connection = getConnection(address);
+		Log.d("SEND", "Connection created!");
+		
 		connection.connect();
 		
-		OutputStream outStream = connection.getOutputStream();
-		PrintWriter writer = new PrintWriter(outStream);
-		writer.write(jsonData.toString());
+		Log.d("RESPONSE CODE AND MESSAGE", connection.getResponseCode()+": "+connection.getResponseMessage());
 		
 		InputStream stream = connection.getInputStream();
 		JSONObject resultData = toJSON(stream);
 		
+		Log.d("SEND", "Read response stream!");
+		
 		connection.disconnect();
+		
+		Log.d("SEND", "Connection terminated!");
+		
+		return resultData;
+	}
+	
+	public JSONObject send(JSONObject jsonData, String address) throws Exception {
+		
+		HttpURLConnection connection = getConnection(address);
+		Log.d("SEND", "Connection created!");
+		
+		OutputStream outStream = connection.getOutputStream();
+		PrintWriter writer = new PrintWriter(outStream);
+		
+		connection.connect();
+		
+		Log.d("SEND", "Connection established!");
+		JSONObject phnos = new JSONObject();
+		phnos.put("phone_number", "9876543210");
+		phnos.put("phone_numbers", "9876543210,9876543211");
+		
+		JSONObject sampleJson = new JSONObject();
+		sampleJson.put("distances", phnos);
+		
+		writer.write(sampleJson.toString());
+		
+		Log.d("REQUEST OBJECT", sampleJson.toString());
+		
+		Log.d("SEND", "Wrote data into stream!");
+		
+		Log.d("RESPONSE CODE AND MESSAGE", connection.getResponseCode()+": "+connection.getResponseMessage());
+		
+		InputStream stream = connection.getInputStream();
+		JSONObject resultData = toJSON(stream);
+		
+		Log.d("SEND", "Read response stream!");
+		
+		connection.disconnect();
+		
+		Log.d("SEND", "Connection terminated!");
 		
 		return resultData;
 	}
@@ -43,6 +87,11 @@ public class NetworkHandler {
 	public JSONObject testSend(JSONObject requestObject, String address) throws Exception {
 		JSONObject json = new JSONObject();
 		
+		json.put("phone_number", "9449728724");
+		json.put("latitude", "1.23456789");
+		json.put("longitude", "1.23456789");	
+		
+		/*
 		JSONObject contact1 = new JSONObject();
 		contact1.put("phone", "(944) 972-8724");
 		contact1.put("distance", "2");
@@ -61,20 +110,9 @@ public class NetworkHandler {
 		contacts.put(contact3);
 		
 		json.put("contacts", contacts);
-		
+		*/
+		Log.d("TEST SEND FOR CHECKIN", json.toString());
 		return json;
-	}
-	
-	public JSONObject testSendLocation(JSONObject j) throws Exception {
-		
-		JSONObject json = new JSONObject();
-		json.put("phone", "9449729724");
-		json.put("location", "myLocation");
-		
-		JSONObject response = new JSONObject();
-		response.put("STATUS", "OK");
-		
-		return response;
 	}
 	
 	/**
@@ -90,6 +128,7 @@ public class NetworkHandler {
 		connection.setReadTimeout(TIMEOUT_IN_MILLIS);
 		connection.setRequestMethod(REQUEST_METHOD);
 		connection.setDoInput(true);
+		connection.setDoOutput(true);
 		
 		return connection;
 	}

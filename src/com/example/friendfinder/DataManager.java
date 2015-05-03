@@ -7,8 +7,11 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.ContactsContract;
 
 public class DataManager {
@@ -24,7 +27,24 @@ public class DataManager {
 	LocationManager locationManager;
 	
 	DataManager(Context context) {
-		locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE); 
+		locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
+			@Override
+			public void onStatusChanged(String provider, int status, Bundle extras) {
+			}
+			
+			@Override
+			public void onProviderEnabled(String provider) {
+			}
+			
+			@Override
+			public void onProviderDisabled(String provider) {
+			}
+			
+			@Override
+			public void onLocationChanged(Location location) {
+			}
+		});
 		
 		this.sharedPreferences = context.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE);
 		this.contentResolver = context.getContentResolver();
@@ -115,10 +135,10 @@ public class DataManager {
 	com.example.friendfinder.Location getLocation() {
 		android.location.Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		
-		double latitude = location.getLatitude();
-		double longitude = location.getLongitude();
-		
-		com.example.friendfinder.Location myLocation = new com.example.friendfinder.Location(latitude, longitude);
+		com.example.friendfinder.Location myLocation = null;
+		if (location != null) {
+			myLocation = new com.example.friendfinder.Location(location.getLatitude(), location.getLongitude());
+		}
 		
 		return myLocation;
 	}
