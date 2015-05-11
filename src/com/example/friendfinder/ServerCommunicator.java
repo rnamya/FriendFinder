@@ -10,8 +10,8 @@ import org.json.JSONObject;
 import android.util.Log;
 
 public class ServerCommunicator {
-	NetworkHandler networkHandler;
-	DataManager dataManager;
+	private final NetworkHandler networkHandler;
+	private final DataManager dataManager;
 	
 	private final String KEY_REQUEST_USERS = "users";
 	private final String KEY_REQUEST_PHONE_NUMBER = "phone_number";
@@ -20,12 +20,11 @@ public class ServerCommunicator {
 	private final String KEY_REQUEST_LATITUDE = "latitude";
 	private final String KEY_REQUEST_LONGITUDE = "longitude";
 
-	private final String KEY_RESPONSE_PHONE = "phone";
+	private final String KEY_RESPONSE_PHONE = "phone_number";
 	private final String KEY_RESPONSE_DISTANCE = "distance";
-	private final String KEY_RESPONSE_CONTACT_ARRAY = "contacts";
+	private final String KEY_RESPONSE_CONTACT_ARRAY = "data";
 	
-	//private static final String SERVER_LOCATION = "http://192.168.0.100";
-	private static final String SERVER_LOCATION = "http://10.0.2.2:3000";
+	private static final String SERVER_LOCATION = "http://lookation-testing.herokuapp.com";
 	
 	private static final String SERVER_REGISTER_ADDRESS = SERVER_LOCATION + "/users/create";
 	private static final String SERVER_UPDATE_LOCATION_ADDRESS = SERVER_LOCATION + "/users/update";
@@ -37,88 +36,52 @@ public class ServerCommunicator {
 	}
 	
 	public String register() throws Exception {
-		JSONObject usersObject = new JSONObject();
-		com.example.friendfinder.Location location = dataManager.getLocation();
-		usersObject.put(KEY_REQUEST_PHONE_NUMBER, dataManager.getUsername());
-		usersObject.put(KEY_REQUEST_LATITUDE, location.getLatitude());
-		usersObject.put(KEY_REQUEST_LONGITUDE, location.getLongitude());
-
-		JSONObject registerJson = new JSONObject();
-		registerJson.put(KEY_REQUEST_USERS, usersObject);
-		
-		JSONObject response = null;
-		
-		try {
-			response = networkHandler.send(registerJson, SERVER_UPDATE_LOCATION_ADDRESS, false);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return (response == null) ? null : response.toString();
+		return send(false);
 	}
 	
-	public String checkIn() throws JSONException, RuntimeException {
+	public String send(final boolean isUpdate) {
 		final com.example.friendfinder.Location location = dataManager.getLocation();
 		if (location == null) {
 			throw new RuntimeException("Location unavailable");
 		}
 		
-		final JSONObject[] responses = new JSONObject[1];
+		final String[] message = new String[1];
+		message[0] = "unknown";
+		
 		new Thread(new Runnable() {
 			@Override
 			public synchronized void run() {
-				JSONObject usersObject = new JSONObject();
-				JSONObject updateJson = new JSONObject();
+				String url = isUpdate? SERVER_UPDATE_LOCATION_ADDRESS: SERVER_REGISTER_ADDRESS;
+				url += "?phone_number=" + dataManager.getUsername() + 
+						"&latitude="+location.getLatitude()+"&longitude="+location.getLongitude();
 				try {
-					usersObject.put(KEY_REQUEST_PHONE_NUMBER, dataManager.getUsername());
-					usersObject.put(KEY_REQUEST_LATITUDE, location.getLatitude());
-					usersObject.put(KEY_REQUEST_LONGITUDE, location.getLongitude());
-					
-					updateJson.put(KEY_REQUEST_USERS, usersObject);
-					
-				} catch(JSONException e) {
-					e.printStackTrace();
-				}
-				
-				try {
-					responses[0] = networkHandler.send(updateJson, SERVER_UPDATE_LOCATION_ADDRESS, false);
+					JSONObject result = networkHandler.sendLocation(url);
+					message[0] = result.getString("message");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		}).start();
 		
-		//For this dirty synchronization to work, NetworkHandler's send function
-		//must always return a non-null value
-		while (responses[0] == null);
-		
-		Log.d("CHECKIN RESPONSE", responses[0].toString());
-		return responses[0].toString();
+		while(message[0] == "unknown");
+
+		return message[0];
+	}
+	
+	public String checkIn() throws JSONException, RuntimeException {
+		return send(true);
 	}
 	
 	public List<Contact> getContactsInfo(List<Contact> contacts) throws Exception {
 		String phoneNumbers = "";
 		for (int i=0; i<contacts.size(); i++) {
-			StringBuilder strbldr = new StringBuilder(contacts.get(i).getPhone());
-			//123123-1234
-			strbldr.deleteCharAt(0);
-			strbldr.deleteCharAt(3);
-			strbldr.deleteCharAt(3);
-			strbldr.deleteCharAt(6);
-			phoneNumbers += strbldr.toString();
+			phoneNumbers += contacts.get(i).getPhone().toString();
 			if (i != contacts.size() - 1) {
 				phoneNumbers += ",";
 			}
 		}
 		
 		String url = SERVER_GET_DISTANCES_ADDRESS + "?phone_number=" + dataManager.getUsername() + "&phone_numbers=" + phoneNumbers;
-		/*JSONObject numbersObject = new JSONObject();
-		numbersObject.put(KEY_REQUEST_PHONE_NUMBER, dataManager.getUsername());
-		numbersObject.put(KEY_REQUEST_PHONE_NUMBERS, phoneNumbers);
-
-		JSONObject json = new JSONObject();
-		json.put(KEY_REQUEST_DISTANCES, numbersObject);
-		*/
 		
 		JSONObject response = null;
 		try {
@@ -147,7 +110,8 @@ public class ServerCommunicator {
 			object = jsonContacts.getJSONObject(i);
 			contact = new Contact();
 			contact.setPhone(object.getString(KEY_RESPONSE_PHONE));
-			contact.setDistance(object.getString(KEY_RESPONSE_DISTANCE));
+			String distance = object.getString(KEY_RESPONSE_DISTANCE);
+			contact.setDistance(distance.substring(0, distance.indexOf('.') + 2));
 			contacts.add(contact);
 		}
 		

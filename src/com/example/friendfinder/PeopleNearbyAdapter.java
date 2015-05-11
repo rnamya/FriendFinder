@@ -19,8 +19,6 @@ public class PeopleNearbyAdapter extends ArrayAdapter<Contact> {
 	  super(context, R.layout.list_item_contact_details, list);
 	  this.context = context;
 	  this.list = list;
-	  
-	  Log.d("PeopleNearbyAdapter constrcutor: ", this.list.toString());
   }
 
   // Creating a view for each list item

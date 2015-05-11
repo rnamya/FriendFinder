@@ -6,12 +6,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class RegisterActivity extends Activity {
 	
 	DataManager dataManager;
 	EditText phone_number;
 	EditText password;
+	ServerCommunicator serverCommunicator;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) { 
@@ -19,6 +21,7 @@ public class RegisterActivity extends Activity {
 		setContentView(R.layout.activity_register);
 	    
 	    dataManager = new DataManager(getApplicationContext());
+	    serverCommunicator = new ServerCommunicator(new NetworkHandler(), new DataManager(getApplicationContext()));
 	    
 	    phone_number = (EditText) findViewById(R.id.phone_number);
 	}
@@ -26,6 +29,17 @@ public class RegisterActivity extends Activity {
 	public void register(View view)
 	{
 		dataManager.setUsername(phone_number.getText().toString());
+		String msg = "";
+		try {
+			serverCommunicator.register();
+			msg = "Success!";
+		} catch (Exception e) {
+			dataManager.setUsername(null);
+			msg = "Failed to register... Try again later";
+		}
+		
+		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+		
 		finish();
 	}
 

@@ -29,11 +29,11 @@ public class MainActivity extends Activity {
         	startActivity(intent);
         }
         
-        setContentView(R.layout.activity_main);
+        	setContentView(R.layout.activity_main);
         
         try {
-        serverCommunicator = new ServerCommunicator(new NetworkHandler(), dataManager);
-        Log.d("VOOOOO", serverCommunicator.getContactsInfo(null).toString());
+	        serverCommunicator = new ServerCommunicator(new NetworkHandler(), dataManager);
+	        Log.d("WHOOOOO", serverCommunicator.getContactsInfo(null).toString());
         }
         catch (Exception e) {
         	e.printStackTrace();
@@ -74,7 +74,6 @@ public class MainActivity extends Activity {
         }
     });
 }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

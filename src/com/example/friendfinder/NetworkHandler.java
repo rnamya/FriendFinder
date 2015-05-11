@@ -8,13 +8,14 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.util.Log;
 
 public class NetworkHandler {
 	private static final int TIMEOUT_IN_MILLIS = 2000;
-	private static final String REQUEST_METHOD = "GET";
+	private static final String REQUEST_METHOD = "POST";
 	
 	public JSONObject send(JSONObject jsonData, String address, boolean testing) throws Exception {
 		if (testing) {
@@ -23,6 +24,26 @@ public class NetworkHandler {
 		else {
 			return send(jsonData, address);
 		}
+	}
+	
+	public JSONObject sendLocation(String url) throws Exception {
+		HttpURLConnection connection = getConnection(url);
+		
+		connection.connect();
+		
+		Log.d("STATUS", connection.getResponseCode()+": "+connection.getResponseMessage());
+		
+		InputStream stream = connection.getInputStream();
+		JSONObject resultData = toJSON(stream);
+		
+		Log.d("SEND", "Read response stream!");
+		Log.d("RESULT", resultData.toString());
+		
+		connection.disconnect();
+		
+		Log.d("SEND", "Connection terminated!");
+		
+		return resultData;
 	}
 	
 	public JSONObject send(String address) throws Exception {
@@ -35,19 +56,19 @@ public class NetworkHandler {
 		Log.d("RESPONSE CODE AND MESSAGE", connection.getResponseCode()+": "+connection.getResponseMessage());
 		
 		InputStream stream = connection.getInputStream();
-		JSONObject resultData = toJSON(stream);
+		JSONArray resultData = toJSONArray(stream);
 		
 		Log.d("SEND", "Read response stream!");
-		
 		connection.disconnect();
-		
 		Log.d("SEND", "Connection terminated!");
 		
-		return resultData;
+		JSONObject returnObject = new JSONObject();
+		returnObject.put("data", resultData);
+		
+		return returnObject;
 	}
 	
 	public JSONObject send(JSONObject jsonData, String address) throws Exception {
-		
 		HttpURLConnection connection = getConnection(address);
 		Log.d("SEND", "Connection created!");
 		
@@ -57,24 +78,15 @@ public class NetworkHandler {
 		connection.connect();
 		
 		Log.d("SEND", "Connection established!");
-		JSONObject phnos = new JSONObject();
-		phnos.put("phone_number", "9876543210");
-		phnos.put("phone_numbers", "9876543210,9876543211");
+		writer.write(jsonData.toString());
 		
-		JSONObject sampleJson = new JSONObject();
-		sampleJson.put("distances", phnos);
-		
-		writer.write(sampleJson.toString());
-		
-		Log.d("REQUEST OBJECT", sampleJson.toString());
-		
+		Log.d("REQUEST OBJECT", jsonData.toString());
 		Log.d("SEND", "Wrote data into stream!");
-		
 		Log.d("RESPONSE CODE AND MESSAGE", connection.getResponseCode()+": "+connection.getResponseMessage());
 		
 		InputStream stream = connection.getInputStream();
 		JSONObject resultData = toJSON(stream);
-		
+
 		Log.d("SEND", "Read response stream!");
 		
 		connection.disconnect();
@@ -142,5 +154,16 @@ public class NetworkHandler {
 		}
 		
 		return new JSONObject(string);
+	}
+	
+	private JSONArray toJSONArray(InputStream stream) throws Exception {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		String line = "", string = "";
+		
+		while ( (line=reader.readLine()) != null) {
+			string += line;
+		}
+		
+		return new JSONArray(string);
 	}
 }

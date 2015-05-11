@@ -109,8 +109,12 @@ public class DataManager {
 	                  Cursor phoneCursor = contentResolver.query(PhoneCONTENT_URI, null, Phone_CONTACT_ID + " = ?", new String[] { contact_id }, null);
 
 	                  while (phoneCursor.moveToNext()) {
-	                      String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
-	                      Contact contact = new Contact(phoneNumber, name, false, "Unknown");
+	                      StringBuffer phoneNumber = new StringBuffer(phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER)));
+	                      phoneNumber.deleteCharAt(0);
+	                      phoneNumber.deleteCharAt(3);
+	                      phoneNumber.deleteCharAt(3);
+	                      phoneNumber.deleteCharAt(6);
+	                      Contact contact = new Contact(phoneNumber.toString(), name, false, "Unknown");
 	                      contactsSet.add(contact);
 	                  }
 	                  phoneCursor.close();
@@ -138,6 +142,9 @@ public class DataManager {
 		com.example.friendfinder.Location myLocation = null;
 		if (location != null) {
 			myLocation = new com.example.friendfinder.Location(location.getLatitude(), location.getLongitude());
+		}
+		else {
+			myLocation = new com.example.friendfinder.Location(1.1f, 2.2f);
 		}
 		
 		return myLocation;
