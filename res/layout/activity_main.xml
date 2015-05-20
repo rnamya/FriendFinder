@@ -6,38 +6,46 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.friendfinder.MainActivity" >
-
+    tools:context="com.example.lookapp.MainActivity" >
+    
     <Button
         android:id="@+id/checkIn"
-        android:layout_width="wrap_content"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:text="@string/text_update" />
+        android:background="@drawable/main_button"
+        android:text="@string/text_check_in"
+        android:textSize="30sp" />
 
     <Button
         android:id="@+id/peopleNearby"
-        android:layout_width="wrap_content"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_centerHorizontal="true"
         android:layout_below="@+id/checkIn"
-        android:layout_marginTop="15dp"
-        android:text="@string/text_people"
-        android:layout_alignLeft="@+id/checkIn"
-        android:layout_alignStart="@+id/checkIn"
-        android:layout_alignRight="@+id/checkIn"
-        android:layout_alignEnd="@+id/checkIn" />
+        android:text="@string/text_people_nearby"
+        android:background="@drawable/main_button"
+        android:textSize="30sp" />
 
     <Button
         android:id="@+id/contacts"
-        android:layout_width="wrap_content"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/peopleNearby"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="40dp"
+        android:layout_centerHorizontal="true"
         android:text="@string/text_contacts"
-        android:layout_alignLeft="@+id/peopleNearby"
-        android:layout_alignStart="@+id/peopleNearby"
-        android:layout_alignRight="@+id/peopleNearby"
-        android:layout_alignEnd="@+id/peopleNearby" />
+        android:background="@drawable/main_button"
+        android:textSize="30sp" />
+    
+    <ImageView 
+        android:id="@+id/main_page_bottom_decorator"
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:src="@drawable/friends_cute"
+        android:layout_alignParentBottom="true"
+        />
 
 </RelativeLayout>

@@ -1,4 +1,4 @@
-package com.example.friendfinder;
+package com.example.lookapp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,13 +13,6 @@ public class ServerCommunicator {
 	private final NetworkHandler networkHandler;
 	private final DataManager dataManager;
 	
-	private final String KEY_REQUEST_USERS = "users";
-	private final String KEY_REQUEST_PHONE_NUMBER = "phone_number";
-	private final String KEY_REQUEST_PHONE_NUMBERS = "phone_numbers";
-	private final String KEY_REQUEST_DISTANCES = "distances";
-	private final String KEY_REQUEST_LATITUDE = "latitude";
-	private final String KEY_REQUEST_LONGITUDE = "longitude";
-
 	private final String KEY_RESPONSE_PHONE = "phone_number";
 	private final String KEY_RESPONSE_DISTANCE = "distance";
 	private final String KEY_RESPONSE_CONTACT_ARRAY = "data";
@@ -39,14 +32,16 @@ public class ServerCommunicator {
 		return send(false);
 	}
 	
+	// Update or Register
+	
 	public String send(final boolean isUpdate) {
-		final com.example.friendfinder.Location location = dataManager.getLocation();
+		final com.example.lookapp.Location location = dataManager.getLocation();
 		if (location == null) {
 			throw new RuntimeException("Location unavailable");
 		}
 		
 		final String[] message = new String[1];
-		message[0] = "unknown";
+		message[0] = "Unable to reach the server. Please try again in sometime.";
 		
 		new Thread(new Runnable() {
 			@Override
@@ -63,7 +58,10 @@ public class ServerCommunicator {
 			}
 		}).start();
 		
-		while(message[0] == "unknown");
+		long start = System.currentTimeMillis();
+		
+		while(message[0] == "Unable to reach the server. Please try again in sometime." 
+							&& (System.currentTimeMillis() - start) < 2000);
 
 		return message[0];
 	}
@@ -85,7 +83,7 @@ public class ServerCommunicator {
 		
 		JSONObject response = null;
 		try {
-			response = networkHandler.send(url);
+			response = networkHandler.sendContactsRequest(url);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

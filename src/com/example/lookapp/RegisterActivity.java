@@ -1,20 +1,25 @@
-package com.example.friendfinder;
+package com.example.lookapp;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class RegisterActivity extends Activity {
 	
-	DataManager dataManager;
 	EditText phone_number;
-	EditText password;
+	
+	DataManager dataManager;
 	ServerCommunicator serverCommunicator;
-
+	
+	Typeface type;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) { 
 		super.onCreate(savedInstanceState);
@@ -23,7 +28,13 @@ public class RegisterActivity extends Activity {
 	    dataManager = new DataManager(getApplicationContext());
 	    serverCommunicator = new ServerCommunicator(new NetworkHandler(), new DataManager(getApplicationContext()));
 	    
+	    type = Typeface.createFromAsset(getAssets(), "Cookies.ttf");
+	    
+	    ((Button) findViewById(R.id.okay)).setTypeface(type);
+	    ((TextView) findViewById(R.id.register)).setTypeface(type);
+	    
 	    phone_number = (EditText) findViewById(R.id.phone_number);
+	    phone_number.setTypeface(type);
 	}
 	
 	public void register(View view)

@@ -1,4 +1,4 @@
-package com.example.friendfinder;
+package com.example.lookapp;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +12,7 @@ import android.util.Log;
 
 public class Database extends SQLiteOpenHelper {
 
-	private static final String DB_NAME = "friendfinder.db";
+	private static final String DB_NAME = "lookapp.db";
 	
 	private static final String TABLE_CONTACT = "contact";
 	

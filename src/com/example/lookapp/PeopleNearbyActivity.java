@@ -1,4 +1,4 @@
-package com.example.friendfinder;
+package com.example.lookapp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,17 +24,12 @@ public class PeopleNearbyActivity extends Activity {
 		setContentView(R.layout.activity_people_nearby);
 
 		listView = (ListView) findViewById(R.id.list);
+
 		dataManager = new DataManager(getApplicationContext());
+
+		serverCommunicator = new ServerCommunicator(new NetworkHandler(), dataManager);
 		
-		try {
-			serverCommunicator = new ServerCommunicator(new NetworkHandler(), dataManager);
-			serverCommunicator.getContactsInfo(null).toString();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		List<Contact> contactsList = new ArrayList<Contact>(dataManager.getAllContacts());
-		new ViewPeopleNearbyTask().execute(contactsList);
+		new ViewPeopleNearbyTask().execute(new ArrayList<Contact>(dataManager.getAllContacts()));
 	}
 	
 	public class ViewPeopleNearbyTask extends AsyncTask<List<Contact>, Void, List<Contact>>
@@ -67,10 +62,16 @@ public class PeopleNearbyActivity extends Activity {
 		@Override
 		protected void onPostExecute(List<Contact> contactsInfo)
 		{
-			 PeopleNearbyAdapter adapter = new PeopleNearbyAdapter(PeopleNearbyActivity.this, contactsInfo);
-			 progressDialog.dismiss();
-			 listView.setAdapter(adapter);
-			 Log.d("ADAPTER", listView.getAdapter().toString());
+		    Contact dummy1 = new Contact("9999999999", "VOV", true, "1km");
+		    Contact dummy2 = new Contact("1111111111", "VOOOOO", true, "4km");
+		    
+		    contactsInfo.add(dummy1);
+		    contactsInfo.add(dummy2);
+		    
+			PeopleNearbyAdapter adapter = new PeopleNearbyAdapter(PeopleNearbyActivity.this, contactsInfo);
+			progressDialog.dismiss();
+			listView.setAdapter(adapter);
+			Log.d("ADAPTER", listView.getAdapter().toString());
 		}
 	}
 	

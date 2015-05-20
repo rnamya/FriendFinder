@@ -1,4 +1,4 @@
-package com.example.friendfinder;
+package com.example.lookapp;
 
 public class Contact {
 	String name;

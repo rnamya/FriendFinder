@@ -6,16 +6,25 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.friendfinder.RegisterActivity" >
+    tools:context="com.example.lookapp.RegisterActivity" >
 
+    <ImageView 
+        android:id="@+id/sign_up_image"
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="25dp"
+        android:src="@drawable/penguins_make_everything_better" />
+    
     <TextView
         android:id="@+id/register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/sign_up_image"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:text="@string/text_register"
+        android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
@@ -35,12 +44,14 @@
     <Button
         android:id="@+id/okay"
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/phone_number"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="15dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
         android:text="@string/button_okay"
-        android:onClick="register" />
+        android:onClick="register"
+        android:textSize="20sp"
+        android:background="@drawable/main_button" />
 
 </RelativeLayout>

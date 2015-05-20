@@ -1,5 +1,5 @@
 /** Automatically generated file. DO NOT MODIFY */
-package com.example.friendfinder;
+package com.example.lookapp;
 
 public final class BuildConfig {
     public final static boolean DEBUG = true;
